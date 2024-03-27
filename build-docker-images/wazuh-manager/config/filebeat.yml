@@ -13,7 +13,7 @@ setup.template.json.path: '/etc/filebeat/wazuh-template.json'
 setup.template.json.name: 'wazuh'
 setup.ilm.enabled: false
 output.elasticsearch:
-  hosts: ['https://wazuh.indexer:9200']
+  hosts: ['https://soteria.indexer:9200']
   #username:
   #password:
   #ssl.verification_mode:
