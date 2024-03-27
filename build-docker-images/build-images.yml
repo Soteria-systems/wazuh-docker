@@ -2,16 +2,16 @@
 version: '3.7'
 
 services:
-  wazuh.manager:
+  soteria.manager:
     build:
-      context: wazuh-manager/
+      context: soteria-manager/
       args:
         WAZUH_VERSION: ${WAZUH_VERSION}
         WAZUH_TAG_REVISION: ${WAZUH_TAG_REVISION}
         FILEBEAT_TEMPLATE_BRANCH: ${FILEBEAT_TEMPLATE_BRANCH}
         WAZUH_FILEBEAT_MODULE: ${WAZUH_FILEBEAT_MODULE}
-    image: wazuh/wazuh-manager:${WAZUH_IMAGE_VERSION}
-    hostname: wazuh.manager
+    image: soteria/soteria-manager:${WAZUH_IMAGE_VERSION}
+    hostname: soteria.manager
     restart: always
     ports:
       - "1514:1514"
@@ -19,7 +19,7 @@ services:
       - "514:514/udp"
       - "55000:55000"
     environment:
-      - INDEXER_URL=https://wazuh.indexer:9200
+      - INDEXER_URL=https://soteria.indexer:9200
       - INDEXER_USERNAME=admin
       - INDEXER_PASSWORD=admin
       - FILEBEAT_SSL_VERIFICATION_MODE=none
@@ -36,14 +36,14 @@ services:
       - filebeat_etc:/etc/filebeat
       - filebeat_var:/var/lib/filebeat
 
-  wazuh.indexer:
+  soteria.indexer:
     build:
-      context: wazuh-indexer/
+      context: soteria-indexer/
       args:
         WAZUH_VERSION: ${WAZUH_VERSION}
         WAZUH_TAG_REVISION: ${WAZUH_TAG_REVISION}
-    image: wazuh/wazuh-indexer:${WAZUH_IMAGE_VERSION}
-    hostname: wazuh.indexer
+    image: soteria/soteria-indexer:${WAZUH_IMAGE_VERSION}
+    hostname: soteria.indexer
     restart: always
     ports:
       - "9200:9200"
@@ -57,15 +57,15 @@ services:
         soft: 65536
         hard: 65536
 
-  wazuh.dashboard:
+  soteria.dashboard:
     build:
-      context: wazuh-dashboard/
+      context: soteria-dashboard/
       args:
         WAZUH_VERSION: ${WAZUH_VERSION}
         WAZUH_TAG_REVISION: ${WAZUH_TAG_REVISION}
         WAZUH_UI_REVISION: ${WAZUH_UI_REVISION}
-    image: wazuh/wazuh-dashboard:${WAZUH_IMAGE_VERSION}
-    hostname: wazuh.dashboard
+    image: soteria/soteria-dashboard:${WAZUH_IMAGE_VERSION}
+    hostname: soteria.dashboard
     restart: always
     ports:
       - 443:443
@@ -73,12 +73,12 @@ services:
       - INDEXER_USERNAME=admin
       - INDEXER_PASSWORD=admin
       - SERVER_SSL_ENABLED=false
-      - WAZUH_API_URL=https://wazuh.manager
+      - WAZUH_API_URL=https://soteria.manager
     depends_on:
-      - wazuh.indexer
+      - soteria.indexer
     links:
-      - wazuh.indexer:wazuh.indexer
-      - wazuh.manager:wazuh.manager
+      - soteria.indexer:soteria.indexer
+      - soteria.manager:soteria.manager
 
 volumes:
   wazuh_api_configuration:
